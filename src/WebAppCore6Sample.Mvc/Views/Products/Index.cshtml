@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row text-center">
+    <h1>Products</h1>
+</div>
+<div class="row">
+    <div class="col p-3">
+        <a asp-action="Create" asp-controller="Products" class="btn btn-success">Create new</a>
+    </div>
+</div>
+
+
+<div class="row row-cols-4">
+    @foreach (var product in Model)
+    {
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Brand for the future</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text"><strong>$ @product.Price.ToString("N000")</strong></p>
+                    <a asp-action="Edit" asp-controller="Products" asp-route-id="@product.Id" class="card-link btn btn-primary">Edit</a>
+                    <a class="card-link btn btn-danger"
+                   data-bs-toggle="modal"
+                   data-bs-target="#staticBackdrop"
+                   onclick="deleteProduct(@product.Id)">Delete</a>
+                </div>
+            </div>
+        </div>
+
+        @*   <div>
+    <p>@product.Title</p>
+    <p>@product.Price</p>
+    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.Id" class="btn btn-primary">Details</a>
+    </div>*@
+    }
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="delete-target">
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function deleteProduct(id){
+            $.ajax({
+                url: '/Products/Delete',
+                data: { id: id },
+                success: function(data) {
+                    $("#delete-target").html(data);
+                }
+            });
+        }
+        
+
+    </script>
+}

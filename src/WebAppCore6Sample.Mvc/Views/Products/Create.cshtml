@@ -1,0 +1,84 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var error = ViewBag.Error;
+}
+
+<div class="row">
+    <div class="col">
+        <h1>Create Product</h1>
+    </div>
+</div>
+
+@if (error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> @error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@using (Html.BeginForm("Create", "Products", FormMethod.Post, new { @class = "needs-validation data-form", @novalidate = "" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="title">Title</label>
+        <div class="col-md-5">
+            <input class="form-control"
+               type="text"
+               name="Title"
+               id="title"
+               required
+               value="@Model.Title">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please choose a title.
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="price">Price</label>
+        <div class="col-md-5">
+            <input class="form-control"
+               type="number"
+               name="Price"
+               id="price"
+               required
+               value="@Model.Price">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        (function() {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}
